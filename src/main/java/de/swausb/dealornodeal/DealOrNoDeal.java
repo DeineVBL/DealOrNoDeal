@@ -21,18 +21,19 @@ public class DealOrNoDeal extends ListenerAdapter {
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
         User user = event.getAuthor();
+        Timer timer = new Timer();
         if (event.getChannel().getName().equalsIgnoreCase("botex")) {
             String message = event.getMessage().getContentRaw();
             if (message.equalsIgnoreCase(".start")) {
                 if (players.containsKey(user.getIdLong())) {
-                    event.getChannel().sendMessage(new EmbedMessage("Fehler", user.getName(), "Du hast bereits ein aktives Spiel!", null).build()).queue();
+                    event.getChannel().sendMessage(new EmbedMessage("Fehler", user.getName(), "Du hast bereits ein aktives Spiel!", null).build()).queue(error -> error.addReaction("❌").queue());
                 } else {
                     players.put(user.getIdLong(), new GameState(EState.CHOOSE_LUCK_CHEST));
-                    event.getChannel().sendMessage(new EmbedMessage("DealOrNoDeal", user.getName(), "Bitte schreibe zuerst deine Glückszahl in den Chat!", "fraucut").build()).queue();
+                    event.getChannel().sendMessage(new EmbedMessage("DealOrNoDeal", user.getName(), "Bitte schreibe zuerst deine Glückszahl in den Chat!", "alle_koffer").build()).queue(luck -> luck.addReaction("☘").queue());
                 }
             }
             if (event.getMessage().getContentRaw().equalsIgnoreCase(".exit")) {
-                event.getChannel().sendMessage(new EmbedMessage("DealOrNoDeal", user.getName(), "Du hast das Spiel verlassen!", "fraucut").build()).queue();
+                event.getChannel().sendMessage(new EmbedMessage("DealOrNoDeal", user.getName(), "Du hast das Spiel verlassen!", "fraucut").build()).queue(leave -> leave.addReaction("👋🏻").queue());
             }
 
             try {
@@ -44,15 +45,8 @@ public class DealOrNoDeal extends ListenerAdapter {
                         if (number > 0 && number < 27) {
                             gameState.setLuckChest(number);
                             gameState.setCurrentState(EState.PICK_CHEST);
-                            event.getChannel().sendMessage(new EmbedMessage("DealOrNoDeal", user.getName(), "Du hast Kiste " + players.get(user.getIdLong()).getLuckChest() + " als deine Glückskiste ausgewählt!", "fraucut").build()).queue(sent -> {
-                                Timer timer = new Timer();
+                            event.getChannel().sendMessage(new EmbedMessage("DealOrNoDeal", user.getName(), "Du hast Kiste " + players.get(user.getIdLong()).getLuckChest() + " als deine Glückskiste ausgewählt!", "frau_mit_koffer_").build()).queue(sent -> {
 
-                                timer.schedule(new TimerTask() {
-                                    @Override
-                                    public void run() {
-                                        event.getChannel().sendMessage(new EmbedMessage("DealOrNoDeal", user.getName(), "Bitte wähle eine Kiste aus!", "DoND").build()).queue();
-                                    }
-                                }, TimeUnit.SECONDS.toMillis(2));
                             });
                         } else {
                             event.getChannel().sendMessage(new EmbedMessage("DealOrNoDeal", user.getName(), "Bitte gib eine Zahl zwischen eins und 26 an!", "DoND").build()).queue();
