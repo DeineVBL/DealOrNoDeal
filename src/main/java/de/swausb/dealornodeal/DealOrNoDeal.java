@@ -4,15 +4,15 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
+import java.text.DecimalFormat;
 import java.util.HashMap;
-import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 public class DealOrNoDeal extends ListenerAdapter {
 
-    private HashMap<Long, GameState> players;
+    private HashMap<Long, Game> players;
 
     public DealOrNoDeal() {
         this.players = new HashMap<>();
@@ -28,7 +28,7 @@ public class DealOrNoDeal extends ListenerAdapter {
                 if (players.containsKey(user.getIdLong())) {
                     event.getChannel().sendMessage(new EmbedMessage("Fehler", user.getName(), "Du hast bereits ein aktives Spiel!", null).build()).queue(error -> error.addReaction("❌").queue());
                 } else {
-                    players.put(user.getIdLong(), new GameState(EState.CHOOSE_LUCK_CHEST));
+                    players.put(user.getIdLong(), new Game(EState.CHOOSE_LUCK_CHEST));
                     event.getChannel().sendMessage(new EmbedMessage("DealOrNoDeal", user.getName(), "Bitte schreibe zuerst deine Glückszahl in den Chat!", "alle_koffer").build()).queue(luck -> luck.addReaction("☘").queue());
                 }
             }
@@ -40,11 +40,11 @@ public class DealOrNoDeal extends ListenerAdapter {
                 int number = Integer.parseInt(message);
 
                 if (players.containsKey(user.getIdLong())) {
-                    GameState gameState = players.get(user.getIdLong());
-                    if (gameState.getCurrentState() == EState.CHOOSE_LUCK_CHEST) {
+                    Game game = players.get(user.getIdLong());
+                    if (game.getCurrentState() == EState.CHOOSE_LUCK_CHEST) {
                         if (number > 0 && number < 27) {
-                            gameState.setLuckChest(number);
-                            gameState.setCurrentState(EState.PICK_CHEST);
+                            game.setLuckChest(number);
+                            game.setCurrentState(EState.PICK_CHEST);
                             event.getChannel().sendMessage(new EmbedMessage("DealOrNoDeal", user.getName(), "Du hast Koffer " + players.get(user.getIdLong()).getLuckChest() + " als deinen Glückskoffer ausgewählt!", "koffer_" + number).build()).queue(sent -> {
                                 timer.schedule(new TimerTask() {
                                     @Override
@@ -56,12 +56,39 @@ public class DealOrNoDeal extends ListenerAdapter {
                         } else {
                             event.getChannel().sendMessage(new EmbedMessage("DealOrNoDeal", user.getName(), "Bitte gib eine Zahl zwischen eins und 26 an!", "DoND").build()).queue();
                         }
-                    } else if (gameState.getCurrentState() == EState.PICK_CHEST) {
+                    } else if (game.getCurrentState() == EState.PICK_CHEST) {
                         if (number > 0 && number < 27) {
-                            if (!gameState.getOpenedChest().contains(number)) {
-                                gameState.getOpenedChest().add(number);
-                                event.getChannel().sendMessage(new EmbedMessage("DealOrNoDeal", user.getName(), "Du hast Koffer " + number + " geöffnet!", "fraucut").build()).queue(message2 -> {
-                                    event.getChannel().sendMessage(new EmbedMessage("DealOrNoDeal", user.getName(), "Koffer " + number + " beinhaltet `" + new Random().nextInt(1000000) + "`", "DoND").build()).queue();
+                            if (!game.getOpenedChest().contains(number)) {
+                                int money = game.getRandomMoney();
+                                game.getOpenedChest().add(number);
+                                game.getAvailableMoney().remove(game.getAvailableMoney().indexOf(money));
+
+                                event.getChannel().sendMessage(new EmbedMessage("DealOrNoDeal", user.getName(), "Ich öffne Koffer " + number, "koffer_" + number).build()).queue(edit -> {
+                                    timer.schedule(new TimerTask() {
+                                        int call = 1;
+                                        @Override
+                                        public void run() {
+
+                                            switch (call) {
+                                                case 1:
+                                                    edit.editMessage(new EmbedMessage("DealOrNoDeal", user.getName(), "Ich öffne Koffer " + number + ".", "koffer_" + number).build()).queue();
+                                                    break;
+                                                case 2:
+                                                    edit.editMessage(new EmbedMessage("DealOrNoDeal", user.getName(), "Ich öffne Koffer " + number + "..", "koffer_" + number).build()).queue();
+                                                    break;
+                                                case 3:
+                                                    edit.editMessage(new EmbedMessage("DealOrNoDeal", user.getName(), "Ich öffne Koffer " + number + "...", "koffer_" + number).build()).queue();
+                                                    break;
+                                            }
+                                            call++;
+                                        }
+                                    }, 1000, 3);
+                                    timer.schedule(new TimerTask() {
+                                        @Override
+                                        public void run() {
+                                            edit.editMessage(new EmbedMessage("DealOrNoDeal", user.getName(), "Der Koffer " + number + " beinhaltet *$" + new DecimalFormat("###,###,###").format(money) + "*", "frau_mit_koffer_" + money).build()).queue();
+                                        }
+                                    }, TimeUnit.SECONDS.toMillis(4));
                                 });
                             } else {
                                 event.getChannel().sendMessage(new EmbedMessage("DealOrNoDeal", user.getName(), "Diesen Koffer hast du bereits geöffnet!", "DoND").build()).queue();
