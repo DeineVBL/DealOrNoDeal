@@ -14,7 +14,7 @@ public class DealOrNoDeal extends ListenerAdapter {
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
         if (event.getChannel().getName().equalsIgnoreCase("botex")){
             if (event.getMessage().getContentRaw().equalsIgnoreCase(".start")) {
-                event.getChannel().sendMessage(new EmbedBuilder().setAuthor("DealOrNoDeal").setTitle("DealOrNoDeal").setColor(Color.orange).setFooter("Bot written by @swausb").setDescription("Bitte wähle zuerst deine Glückszahl aus!").setThumbnail("").build()).queue();
+                event.getChannel().sendMessage(new EmbedBuilder().setAuthor("DealOrNoDeal").setTitle("DealOrNoDeal").setColor(Color.orange).setFooter("Bot written by @swausb").setDescription("Bitte wähle zuerst deine Glückszahl aus!").setImage("https://github.com/swausb/DealOrNoDeal/blob/master/images/fraucut.png?raw=true").build()).queue();
             }
         }
     }
