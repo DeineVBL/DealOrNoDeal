@@ -20,10 +20,10 @@ public class DealOrNoDeal extends ListenerAdapter {
         if (event.getChannel().getName().equalsIgnoreCase("botex")){
             if (event.getMessage().getContentRaw().equalsIgnoreCase(".start")) {
                 if (players.containsKey(user.getIdLong())) {
-                    event.getChannel().sendMessage(new EmbedMessage("Fehler", "Du hast bereits ein aktives Spiel!", null).build()).queue();
+                    event.getChannel().sendMessage(new EmbedMessage("Fehler", user.getName(), "Du hast bereits ein aktives Spiel!", null).build()).queue();
                 } else {
                     players.put(user.getIdLong(), new GameState(EState.CHOOSE_LUCK_CHEST, 0, 0));
-                    event.getChannel().sendMessage(new EmbedMessage("DealOrNoDeal", "Bitte schreibe zuerst deine Glückszahl in den Chat!", "fraucut").build()).queue();
+                    event.getChannel().sendMessage(new EmbedMessage("DealOrNoDeal", user.getName(), "Bitte schreibe zuerst deine Glückszahl in den Chat!", "DoND").build()).queue();
                 }
             }
         }

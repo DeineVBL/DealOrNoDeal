@@ -7,19 +7,21 @@ import java.awt.*;
 
 public class EmbedMessage {
     private String title;
+    private String author;
     private String description;
     private String imagename;
     private MessageEmbed.Field[] fields;
 
-    public EmbedMessage(String title, String description, String imagename, MessageEmbed.Field... fields) {
+    public EmbedMessage(String title, String author, String description, String imagename, MessageEmbed.Field... fields) {
         this.title = title;
+        this.author = author;
         this.description = description;
         this.imagename = imagename;
         this.fields = fields;
     }
 
     public MessageEmbed build(){
-        EmbedBuilder builder = new EmbedBuilder().setAuthor("DealOrNoDeal").setDescription(description).setTitle(title).setColor(Color.orange).setFooter("DoND Bot written by @swausb");
+        EmbedBuilder builder = new EmbedBuilder().setAuthor(author).setDescription(description).setTitle(title).setColor(Color.orange).setFooter("DoND Bot written by @swausb");
 
         if (imagename != null)
             builder.setImage("https://github.com/swausb/DealOrNoDeal/blob/master/images/" + imagename + ".png?raw=true&size=1");
