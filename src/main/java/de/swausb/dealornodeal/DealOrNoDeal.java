@@ -45,8 +45,13 @@ public class DealOrNoDeal extends ListenerAdapter {
                         if (number > 0 && number < 27) {
                             gameState.setLuckChest(number);
                             gameState.setCurrentState(EState.PICK_CHEST);
-                            event.getChannel().sendMessage(new EmbedMessage("DealOrNoDeal", user.getName(), "Du hast Kiste " + players.get(user.getIdLong()).getLuckChest() + " als deine Glückskiste ausgewählt!", "frau_mit_koffer_").build()).queue(sent -> {
-
+                            event.getChannel().sendMessage(new EmbedMessage("DealOrNoDeal", user.getName(), "Du hast Koffer " + players.get(user.getIdLong()).getLuckChest() + " als deinen Glückskoffer ausgewählt!", "koffer_" + number).build()).queue(sent -> {
+                                timer.schedule(new TimerTask() {
+                                    @Override
+                                    public void run() {
+                                        sent.editMessage(new EmbedMessage("DealOrNoDeal", user.getName(), "Bitte wähle einen Koffer aus!", "alle_koffer").build()).queue();
+                                    }
+                                }, 1500);
                             });
                         } else {
                             event.getChannel().sendMessage(new EmbedMessage("DealOrNoDeal", user.getName(), "Bitte gib eine Zahl zwischen eins und 26 an!", "DoND").build()).queue();
@@ -55,11 +60,11 @@ public class DealOrNoDeal extends ListenerAdapter {
                         if (number > 0 && number < 27) {
                             if (!gameState.getOpenedChest().contains(number)) {
                                 gameState.getOpenedChest().add(number);
-                                event.getChannel().sendMessage(new EmbedMessage("DealOrNoDeal", user.getName(), "Du hast Kiste " + number + " geöffnet!", "fraucut").build()).queue(message2 -> {
-                                    event.getChannel().sendMessage(new EmbedMessage("DealOrNoDeal", user.getName(), "Kiste " + number + " beinhaltet `" + new Random().nextInt(1000000) + "`", "DoND").build()).queue();
+                                event.getChannel().sendMessage(new EmbedMessage("DealOrNoDeal", user.getName(), "Du hast Koffer " + number + " geöffnet!", "fraucut").build()).queue(message2 -> {
+                                    event.getChannel().sendMessage(new EmbedMessage("DealOrNoDeal", user.getName(), "Koffer " + number + " beinhaltet `" + new Random().nextInt(1000000) + "`", "DoND").build()).queue();
                                 });
                             } else {
-                                event.getChannel().sendMessage(new EmbedMessage("DealOrNoDeal", user.getName(), "Diese Kiste hast du bereits geöffnet!", "DoND").build()).queue();
+                                event.getChannel().sendMessage(new EmbedMessage("DealOrNoDeal", user.getName(), "Diesen Koffer hast du bereits geöffnet!", "DoND").build()).queue();
                             }
                         } else {
                             event.getChannel().sendMessage(new EmbedMessage("DealOrNoDeal", user.getName(), "Bitte gib eine Zahl zwischen eins und 26 an!", "DoND").build()).queue();
