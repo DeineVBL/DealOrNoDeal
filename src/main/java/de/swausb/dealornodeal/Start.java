@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import javax.security.auth.login.LoginException;
 
 import de.swausb.dealornodeal.listener.GuildMessageReceivedListener;
+import de.swausb.dealornodeal.utils.Property;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
@@ -17,10 +18,13 @@ import net.dv8tion.jda.api.utils.Compression;
 public class Start {
 
 	public static JDA jda;
+	public static Property property;
 
 	public static void main(String[] args) {
+		property = new Property();
+		property.setDefaultProps();
 		try {
-			jda = JDABuilder.createDefault("Nzk4NjI3NTUzNjczMDg0OTY5.X_3x3g.0ZIRdjswg1iRUnyJjC1pRkx78I4")
+			jda = JDABuilder.createDefault(property.get("cfg", "token"))
 					.setActivity(Activity.watching("DVBL auf Instagram"))
 					.setAutoReconnect(true)
 					.setStatus(OnlineStatus.ONLINE)
