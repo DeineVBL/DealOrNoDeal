@@ -1,18 +1,24 @@
 package de.swausb.dealornodeal;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GameState {
 
     private EState currentState;
-    private int openedChest, calledDeals;
+    private int luckChest;
+    private ArrayList<Integer> openedChest, calledDeals;
 
-    public GameState (EState eState) {
+    public GameState(EState eState) {
         currentState = eState;
-        this.openedChest = 0;
-        this.calledDeals = 0;
+        this.luckChest = 0;
+        this.openedChest = new ArrayList<>();
+        this.calledDeals = new ArrayList<>();
     }
 
-    public GameState(EState currentState, int openedChest, int calledDeals) {
+    public GameState(EState currentState, int luckChest, ArrayList<Integer> openedChest, ArrayList<Integer> calledDeals) {
         this.currentState = currentState;
+        this.luckChest = luckChest;
         this.openedChest = openedChest;
         this.calledDeals = calledDeals;
     }
@@ -25,19 +31,19 @@ public class GameState {
         this.currentState = currentState;
     }
 
-    public int getOpenedChest() {
+    public ArrayList<Integer> getOpenedChest() {
         return openedChest;
     }
 
-    public void setOpenedChest(int openedChest) {
-        this.openedChest = openedChest;
-    }
-
-    public int getCalledDeals() {
+    public ArrayList<Integer> getCalledDeals() {
         return calledDeals;
     }
 
-    public void setCalledDeals(int calledDeals) {
-        this.calledDeals = calledDeals;
+    public int getLuckChest() {
+        return luckChest;
+    }
+
+    public void setLuckChest(int luckChest) {
+        this.luckChest = luckChest;
     }
 }
