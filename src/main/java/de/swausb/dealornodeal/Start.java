@@ -20,7 +20,7 @@ public class Start {
 
 	public static void main(String[] args) {
 		try {
-			jda = JDABuilder.createDefault("Nzk4NjI3NTUzNjczMDg0OTY5.X_3x3g.02F6d768ZH7cJrIyA83eKUQgCTU")
+			jda = JDABuilder.createDefault(property.get("cfg", "token"))
 					.setActivity(Activity.watching("DVBL auf Instagram"))
 					.setAutoReconnect(true)
 					.setStatus(OnlineStatus.ONLINE)
