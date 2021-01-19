@@ -51,7 +51,7 @@ public class DealOrNoDeal extends ListenerAdapter {
                                     public void run() {
                                         sent.editMessage(new EmbedMessage("DealOrNoDeal", user.getName(), "Bitte wähle einen Koffer aus!", "alle_koffer").build()).queue();
                                     }
-                                }, 1500);
+                                }, 3500);
                             });
                         } else {
                             event.getChannel().sendMessage(new EmbedMessage("DealOrNoDeal", user.getName(), "Bitte gib eine Zahl zwischen eins und 26 an!", "DoND").build()).queue();
