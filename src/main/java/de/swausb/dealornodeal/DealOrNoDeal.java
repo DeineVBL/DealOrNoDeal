@@ -1,9 +1,11 @@
 package de.swausb.dealornodeal;
 
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
+import java.lang.reflect.Field;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Timer;
@@ -61,6 +63,7 @@ public class DealOrNoDeal extends ListenerAdapter {
                             if (!game.getOpenedChest().contains(number)) {
                                 int money = game.getRandomMoney();
                                 game.getOpenedChest().add(number);
+                                game.getChestLoot().put(number, money);
                                 game.getAvailableMoney().remove(game.getAvailableMoney().indexOf(money));
 
                                 event.getChannel().sendMessage(new EmbedMessage("DealOrNoDeal", user.getName(), "Ich öffne Koffer " + number, "koffer_" + number).build()).queue(edit -> {
@@ -86,7 +89,11 @@ public class DealOrNoDeal extends ListenerAdapter {
                                     timer.schedule(new TimerTask() {
                                         @Override
                                         public void run() {
-                                            edit.editMessage(new EmbedMessage("DealOrNoDeal", user.getName(), "Der Koffer " + number + " beinhaltet *$" + new DecimalFormat("###,###,###").format(money) + "*", "frau_mit_koffer_" + money).build()).queue();
+                                            MessageEmbed msg = new EmbedMessage("DealOrNoDeal", user.getName(), "Der Koffer " + number + " beinhaltet **$" + new DecimalFormat("###,###,###").format(money) + "**", "frau_mit_koffer_" + money).build();
+                                            for (int i = 1; i < 27; i++) {
+                                                msg.getFields().add(new MessageEmbed.Field("Koffer " + i, "» `" + game.getChestLoot().get(i) + "`", true));
+                                            }
+                                            edit.editMessage(msg).queue();
                                         }
                                     }, TimeUnit.SECONDS.toMillis(4));
                                 });
