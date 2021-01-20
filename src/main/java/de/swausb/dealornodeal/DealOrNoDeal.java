@@ -35,9 +35,14 @@ public class DealOrNoDeal extends ListenerAdapter {
                 }
             }
             if (event.getMessage().getContentRaw().equalsIgnoreCase(".exit")) {
-                event.getChannel().sendMessage(new EmbedMessage("DealOrNoDeal", user.getName(), "Du hast das Spiel verlassen!", "fraucut").build()).queue(leave -> leave.addReaction("👋🏻").queue());
+                if (players.containsKey(user.getIdLong())) {
+                    event.getChannel().sendMessage(new EmbedMessage("DealOrNoDeal", user.getName(), "Du hast das Spiel verlassen!", "fraucut").build()).queue(leave -> leave.addReaction("👋🏻").queue());
+                } else {
+                    event.getChannel().sendMessage(new EmbedMessage("DealOrNoDeal", user.getName(), "Du hast noch kein Spiel gestartet!", "DoND").build()).queue(exitMessage -> {
+                        exitMessage.addReaction("❌").queue();
+                    });
+                }
             }
-
             try {
                 int number = Integer.parseInt(message);
 
@@ -86,7 +91,7 @@ public class DealOrNoDeal extends ListenerAdapter {
                                             }
                                             edit.editMessage(builder.build()).queue();
                                         }
-                                    }, TimeUnit.SECONDS.toMillis(3));
+                                    }, TimeUnit.SECONDS.toMillis(2));
                                 });
                             } else {
                                 event.getChannel().sendMessage(new EmbedMessage("DealOrNoDeal", user.getName(), "Diesen Koffer hast du bereits geöffnet!", "DoND").build()).queue();
