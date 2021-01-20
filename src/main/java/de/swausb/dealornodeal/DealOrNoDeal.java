@@ -73,7 +73,11 @@ public class DealOrNoDeal extends ListenerAdapter {
                                         public void run() {
                                             EmbedBuilder builder = new EmbedMessage("DealOrNoDeal", user.getName(), "Der Koffer " + number + " beinhaltet **$" + new DecimalFormat("###,###,###").format(money) + "**", "frau_mit_koffer_" + money).raw();
                                             for (int i = 1; i < 27; i++) {
-                                                builder.getFields().add(new MessageEmbed.Field("Koffer " + i, "» `" + game.getChestLoot().get(i) + "`", true));
+                                                if (game.getChestLoot().containsKey(i)) {
+                                                    builder.getFields().add(new MessageEmbed.Field("Koffer " + i, "» `$" + new DecimalFormat("###,###,###").format(game.getChestLoot().get(i)) + "`", true));
+                                                } else {
+                                                    builder.getFields().add(new MessageEmbed.Field("Koffer " + i, "» `nicht geöffnet`", true));
+                                                }
                                             }
                                             edit.editMessage(builder.build()).queue();
                                         }
