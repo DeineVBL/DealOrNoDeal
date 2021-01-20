@@ -1,9 +1,6 @@
 package de.swausb.dealornodeal;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class Game {
 
@@ -11,6 +8,7 @@ public class Game {
     private int luckChest;
     private ArrayList<Integer> openedChest, calledDeals;
     private ArrayList<Integer> availableMoney;
+    private HashMap<Integer, Integer> chestLoot;
 
     public Game(EState eState) {
         currentState = eState;
@@ -18,6 +16,7 @@ public class Game {
         this.openedChest = new ArrayList<>();
         this.calledDeals = new ArrayList<>();
         this.availableMoney = new ArrayList<>(Arrays.asList(1, 5, 10, 15, 25, 50, 75, 100, 200, 300, 400, 500, 750, 1000, 5000, 10000, 25000, 75000, 100000, 200000, 300000, 400000, 500000, 750000, 1000000));
+        this.chestLoot = new HashMap<>();
     }
 
     public Game(EState currentState, int luckChest, ArrayList<Integer> openedChest, ArrayList<Integer> calledDeals) {
@@ -57,5 +56,9 @@ public class Game {
 
     public ArrayList<Integer> getAvailableMoney() {
         return availableMoney;
+    }
+
+    public HashMap<Integer, Integer> getChestLoot() {
+        return chestLoot;
     }
 }
