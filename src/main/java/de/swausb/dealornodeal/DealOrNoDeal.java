@@ -1,5 +1,6 @@
 package de.swausb.dealornodeal;
 
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -70,11 +71,11 @@ public class DealOrNoDeal extends ListenerAdapter {
                                     timer.schedule(new TimerTask() {
                                         @Override
                                         public void run() {
-                                            MessageEmbed msg = new EmbedMessage("DealOrNoDeal", user.getName(), "Der Koffer " + number + " beinhaltet **$" + new DecimalFormat("###,###,###").format(money) + "**", "frau_mit_koffer_" + money).build();
+                                            EmbedBuilder builder = new EmbedMessage("DealOrNoDeal", user.getName(), "Der Koffer " + number + " beinhaltet **$" + new DecimalFormat("###,###,###").format(money) + "**", "frau_mit_koffer_" + money).raw();
                                             for (int i = 1; i < 27; i++) {
-                                                msg.getFields().add(new MessageEmbed.Field("Koffer " + i, "» `" + game.getChestLoot().get(i) + "`", true));
+                                                builder.getFields().add(new MessageEmbed.Field("Koffer " + i, "» `" + game.getChestLoot().get(i) + "`", true));
                                             }
-                                            edit.editMessage(msg).queue();
+                                            edit.editMessage(builder.build()).queue();
                                         }
                                     }, TimeUnit.SECONDS.toMillis(3));
                                 });
