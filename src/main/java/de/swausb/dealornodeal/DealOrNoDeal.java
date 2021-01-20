@@ -6,7 +6,6 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
-import java.lang.reflect.Field;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Timer;
@@ -54,7 +53,7 @@ public class DealOrNoDeal extends ListenerAdapter {
                                     public void run() {
                                         sent.editMessage(new EmbedMessage("DealOrNoDeal", user.getName(), "Bitte wähle einen Koffer aus!", "alle_koffer").build()).queue();
                                     }
-                                }, 3500);
+                                }, 2000);
                             });
                         } else {
                             event.getChannel().sendMessage(new EmbedMessage("DealOrNoDeal", user.getName(), "Bitte gib eine Zahl zwischen eins und 26 an!", "DoND").build()).queue();
@@ -71,12 +70,18 @@ public class DealOrNoDeal extends ListenerAdapter {
                                     timer.schedule(new TimerTask() {
                                         @Override
                                         public void run() {
-                                            EmbedBuilder builder = new EmbedMessage("DealOrNoDeal", user.getName(), "Der Koffer " + number + " beinhaltet **$" + new DecimalFormat("###,###,###").format(money) + "**", "frau_mit_koffer_" + money).raw();
+                                            EmbedBuilder builder = new EmbedMessage("**$" + new DecimalFormat("###,###,###").format(money) + " hast du gezogen!**", user.getName(),"", "frau_mit_koffer_" + money).raw();
                                             for (int i = 1; i < 27; i++) {
                                                 if (game.getChestLoot().containsKey(i)) {
-                                                    builder.getFields().add(new MessageEmbed.Field("Koffer " + i, "» `$" + new DecimalFormat("###,###,###").format(game.getChestLoot().get(i)) + "`", true));
+                                                    int storedmoney = game.getChestLoot().get(i);
+                                                    if (storedmoney == money){
+                                                        builder.getFields().add(new MessageEmbed.Field("Koffer " + i, "» __$" + new DecimalFormat("###,###,###").format(game.getChestLoot().get(i)) + "__", true));
+                                                    }
+                                                    else {
+                                                        builder.getFields().add(new MessageEmbed.Field("Koffer " + i, "» `$" + new DecimalFormat("###,###,###").format(game.getChestLoot().get(i)) + "`", true));
+                                                    }
                                                 } else {
-                                                    builder.getFields().add(new MessageEmbed.Field("Koffer " + i, "» `nicht geöffnet`", true));
+                                                    builder.getFields().add(new MessageEmbed.Field("Koffer " + i, "» `x`", true));
                                                 }
                                             }
                                             edit.editMessage(builder.build()).queue();
