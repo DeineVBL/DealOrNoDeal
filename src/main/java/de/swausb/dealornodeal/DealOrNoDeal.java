@@ -68,25 +68,6 @@ public class DealOrNoDeal extends ListenerAdapter {
 
                                 event.getChannel().sendMessage(new EmbedMessage("DealOrNoDeal", user.getName(), "Ich öffne Koffer " + number, "koffer_" + number).build()).queue(edit -> {
                                     timer.schedule(new TimerTask() {
-                                        int call = 1;
-                                        @Override
-                                        public void run() {
-
-                                            switch (call) {
-                                                case 1:
-                                                    edit.editMessage(new EmbedMessage("DealOrNoDeal", user.getName(), "Ich öffne Koffer " + number + ".", "koffer_" + number).build()).queue();
-                                                    break;
-                                                case 2:
-                                                    edit.editMessage(new EmbedMessage("DealOrNoDeal", user.getName(), "Ich öffne Koffer " + number + "..", "koffer_" + number).build()).queue();
-                                                    break;
-                                                case 3:
-                                                    edit.editMessage(new EmbedMessage("DealOrNoDeal", user.getName(), "Ich öffne Koffer " + number + "...", "koffer_" + number).build()).queue();
-                                                    break;
-                                            }
-                                            call++;
-                                        }
-                                    }, 1000, 3);
-                                    timer.schedule(new TimerTask() {
                                         @Override
                                         public void run() {
                                             MessageEmbed msg = new EmbedMessage("DealOrNoDeal", user.getName(), "Der Koffer " + number + " beinhaltet **$" + new DecimalFormat("###,###,###").format(money) + "**", "frau_mit_koffer_" + money).build();
@@ -95,7 +76,7 @@ public class DealOrNoDeal extends ListenerAdapter {
                                             }
                                             edit.editMessage(msg).queue();
                                         }
-                                    }, TimeUnit.SECONDS.toMillis(4));
+                                    }, TimeUnit.SECONDS.toMillis(3));
                                 });
                             } else {
                                 event.getChannel().sendMessage(new EmbedMessage("DealOrNoDeal", user.getName(), "Diesen Koffer hast du bereits geöffnet!", "DoND").build()).queue();
