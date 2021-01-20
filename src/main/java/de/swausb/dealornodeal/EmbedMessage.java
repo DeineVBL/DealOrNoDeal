@@ -24,7 +24,7 @@ public class EmbedMessage {
         EmbedBuilder builder = new EmbedBuilder().setAuthor(author).setDescription(description).setTitle(title).setColor(Color.orange).setFooter("DoND Bot written by @swausb || @realEntwickler");
 
         if (imagename != null)
-            builder.setImage("https://github.com/swausb/DealOrNoDeal/blob/master/images/" + imagename + ".png?raw=true");
+            builder.setImage("https://github.com/DeineVBL/DealOrNoDeal/blob/master/images/" + imagename + ".png?raw=true");
 
         if (fields != null && fields.length > 0) {
             for (MessageEmbed.Field field : fields) {
@@ -39,7 +39,7 @@ public class EmbedMessage {
         EmbedBuilder builder = new EmbedBuilder().setAuthor(author).setDescription(description).setTitle(title).setColor(Color.orange).setFooter("DoND Bot written by @swausb || @realEntwickler");
 
         if (imagename != null)
-            builder.setImage("https://github.com/swausb/DealOrNoDeal/blob/master/images/" + imagename + ".png?raw=true");
+            builder.setImage("https://github.com/DeineVBL/DealOrNoDeal/blob/master/images/" + imagename + ".png?raw=true");
 
         if (fields != null && fields.length > 0) {
             for (MessageEmbed.Field field : fields) {
